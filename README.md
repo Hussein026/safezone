@@ -2,9 +2,9 @@
 
 ## Team Composition
 | Name | Surname | Group |
-|------|---------|-------|
-| ... | ... | ... |
-| ... | ... | ... |
+|Mokhadder|Hussein|1231EC|
+| Zayaad | Saedd | 1231EC |
+| Tiouchichine | Adel | 1231EC |
 
 ## Project Description
 A Flutter app where users report and receive 
