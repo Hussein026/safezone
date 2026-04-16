@@ -14,7 +14,7 @@ map, anonymous reporting, and offline support.
 
 **Screens:** Map, Feed, Report Incident, 
 Incident Detail, SOS, Notifications, 
-Community Groups, Analytics, Settings, Admin
+Community Groups, Analytics, Settings, Admin,log in 
 
 **Tools:** Flutter, Firebase Auth, Firestore, 
 BLoC, WebSockets, Google Maps, Hive
