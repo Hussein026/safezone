@@ -3,7 +3,7 @@ import '../../core/services/firebase_service.dart';
 import '../../core/services/location_service.dart';
 import '../../data/models/incident_model.dart';
 import 'sos_event.dart';
-import 'sos_state.dart' hide SosCancelled;
+import 'sos_state.dart';
 
 class SosBloc extends Bloc<SosEvent, SosState> {
   final FirebaseService _firebaseService;
@@ -27,7 +27,7 @@ class SosBloc extends Bloc<SosEvent, SosState> {
 
       final sosIncident = IncidentModel(
         id: '',
-        title: '🆘 SOS Emergency Alert',
+        title: 'SOS Emergency Alert',
         description: 'User triggered SOS emergency alert',
         category: 'Medical Emergency',
         severity: 'critical',
@@ -48,6 +48,6 @@ class SosBloc extends Bloc<SosEvent, SosState> {
     SosCancelled event,
     Emitter<SosState> emit,
   ) async {
-    emit(SosCancelled() as SosState);
+    emit(SosCancelledState());
   }
 }

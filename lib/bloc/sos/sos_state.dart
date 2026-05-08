@@ -10,7 +10,7 @@ class SosActive extends SosState {
   SosActive({required this.latitude, required this.longitude});
 }
 
-class SosCancelled extends SosState {}
+class SosCancelledState extends SosState {}
 
 class SosError extends SosState {
   final String message;

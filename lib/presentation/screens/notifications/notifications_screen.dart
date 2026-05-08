@@ -4,7 +4,6 @@ import '../../../core/constants/app_colors.dart';
 import '../../../bloc/notification/notification_bloc.dart';
 import '../../../bloc/notification/notification_event.dart';
 import '../../../bloc/notification/notification_state.dart';
-import '../../../data/models/notification_model.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -17,7 +16,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<NotificationBloc>().add(LoadNotifications());
+    context.read<NotificationBloc>().add(
+          NotificationLoadRequested(userId: ''),
+        );
   }
 
   Color _getBorderColor(String type) {
@@ -67,19 +68,25 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         elevation: 0,
         title: const Text(
           'Notifications',
-          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: AppColors.black),
+          style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: AppColors.black),
         ),
         centerTitle: false,
         actions: [
           BlocBuilder<NotificationBloc, NotificationState>(
             builder: (context, state) {
-              if (state is NotificationLoaded && state.notifications.isNotEmpty) {
+              if (state is NotificationLoaded &&
+                  state.notifications.isNotEmpty) {
                 return TextButton(
-                  onPressed: () =>
-                      context.read<NotificationBloc>().add(ClearAllNotifications()),
+                  onPressed: () => context
+                      .read<NotificationBloc>()
+                      .add(NotificationLoadRequested(userId: '')),
                   child: const Text(
                     'Clear all',
-                    style: TextStyle(color: AppColors.primary, fontSize: 14),
+                    style:
+                        TextStyle(color: AppColors.primary, fontSize: 14),
                   ),
                 );
               }
@@ -91,26 +98,27 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       body: BlocBuilder<NotificationBloc, NotificationState>(
         builder: (context, state) {
           if (state is NotificationLoading) {
-            return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+            return const Center(
+                child: CircularProgressIndicator(
+                    color: AppColors.primary));
           }
-
           if (state is NotificationError) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.error_outline, size: 48, color: AppColors.grey),
+                  const Icon(Icons.error_outline,
+                      size: 48, color: AppColors.grey),
                   const SizedBox(height: 12),
                   Text(state.message,
-                      style: const TextStyle(fontSize: 14, color: AppColors.grey)),
+                      style: const TextStyle(
+                          fontSize: 14, color: AppColors.grey)),
                 ],
               ),
             );
           }
-
           if (state is NotificationLoaded) {
             final notifications = state.notifications;
-
             if (notifications.isEmpty) {
               return Center(
                 child: Column(
@@ -121,18 +129,21 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     const SizedBox(height: 16),
                     const Text(
                       'No notifications yet',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.black),
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.black),
                     ),
                     const SizedBox(height: 8),
                     const Text(
                       "You're all caught up!",
-                      style: TextStyle(fontSize: 14, color: AppColors.grey),
+                      style:
+                          TextStyle(fontSize: 14, color: AppColors.grey),
                     ),
                   ],
                 ),
               );
             }
-
             return ListView.separated(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
               itemCount: notifications.length,
@@ -140,13 +151,15 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               itemBuilder: (context, index) {
                 final notif = notifications[index];
                 final borderColor = _getBorderColor(notif.type);
-
                 return GestureDetector(
                   onTap: () {
                     if (!notif.isRead) {
-                      context
-                          .read<NotificationBloc>()
-                          .add(MarkNotificationAsRead(notif.id));
+                      context.read<NotificationBloc>().add(
+                            NotificationMarkReadRequested(
+                              userId: '',
+                              notificationId: notif.id,
+                            ),
+                          );
                     }
                   },
                   child: AnimatedContainer(
@@ -157,10 +170,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       border: notif.isRead
                           ? Border.all(color: Colors.grey.shade100)
                           : Border(
-                              left: BorderSide(color: borderColor, width: 4),
-                              top: BorderSide(color: Colors.grey.shade100),
-                              right: BorderSide(color: Colors.grey.shade100),
-                              bottom: BorderSide(color: Colors.grey.shade100),
+                              left: BorderSide(
+                                  color: borderColor, width: 4),
+                              top: BorderSide(
+                                  color: Colors.grey.shade100),
+                              right: BorderSide(
+                                  color: Colors.grey.shade100),
+                              bottom: BorderSide(
+                                  color: Colors.grey.shade100),
                             ),
                       boxShadow: [
                         BoxShadow(
@@ -188,7 +205,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           const SizedBox(width: 12),
                           Expanded(
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment:
+                                  CrossAxisAlignment.start,
                               children: [
                                 Row(
                                   children: [
@@ -218,14 +236,18 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                 const SizedBox(height: 4),
                                 Text(
                                   notif.body,
-                                  style: const TextStyle(fontSize: 12, color: AppColors.grey),
+                                  style: const TextStyle(
+                                      fontSize: 12,
+                                      color: AppColors.grey),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 const SizedBox(height: 6),
                                 Text(
                                   _timeAgo(notif.createdAt),
-                                  style: const TextStyle(fontSize: 12, color: AppColors.grey),
+                                  style: const TextStyle(
+                                      fontSize: 12,
+                                      color: AppColors.grey),
                                 ),
                               ],
                             ),
@@ -238,7 +260,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               },
             );
           }
-
           return const SizedBox.shrink();
         },
       ),
