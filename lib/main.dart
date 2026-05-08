@@ -8,23 +8,24 @@ import 'package:safezone/bloc/notification/notification_bloc.dart';
 import 'package:safezone/bloc/sos/sos_bloc.dart';
 import 'package:safezone/core/services/firebase_service.dart';
 import 'package:safezone/core/services/hive_service.dart';
+import 'package:safezone/core/services/http_service.dart';
 import 'package:safezone/core/theme/app_theme.dart';
+import 'package:safezone/data/models/incident_model_test.dart';
 import 'package:safezone/presentation/screens/admin/admin_screen.dart';
+import 'package:safezone/presentation/screens/analytics/analytics_screen.dart';
 import 'package:safezone/presentation/screens/auth/forgot_password_screen.dart';
 import 'package:safezone/presentation/screens/auth/login_screen.dart';
 import 'package:safezone/presentation/screens/auth/register_screen.dart';
 import 'package:safezone/presentation/screens/community/community_screen.dart';
 import 'package:safezone/presentation/screens/feed/feed_screen.dart';
 import 'package:safezone/presentation/screens/home/home_screen.dart';
+import 'package:safezone/presentation/screens/incident/incident_detail_screen.dart';
+import 'package:safezone/presentation/screens/incident/report_incident_screen.dart';
 import 'package:safezone/presentation/screens/notifications/notifications_screen.dart';
 import 'package:safezone/presentation/screens/profile_setup/profile_setup_screen.dart';
 import 'package:safezone/presentation/screens/settings/settings_screen.dart';
 import 'package:safezone/presentation/screens/sos/sos_screen.dart';
 import 'package:safezone/presentation/screens/splash/splash_screen.dart';
-import 'package:safezone/presentation/screens/incident/report_incident_screen.dart';
-import 'package:safezone/presentation/screens/incident/incident_detail_screen.dart';
-import 'package:safezone/presentation/screens/analytics/analytics_screen.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +40,11 @@ void main() async {
     ),
   );
   await HiveService.init();
+  testEquatable();
+  HttpService.fetchWithInvalidUrl().catchError((e) {
+    debugPrint('Task II Complete - Final error: $e');
+    return <Map<String, dynamic>>[];
+  });
   runApp(const MyApp());
 }
 
@@ -92,4 +98,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

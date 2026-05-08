@@ -1,4 +1,10 @@
-class IncidentModel {
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'incident_model.g.dart';
+
+@JsonSerializable()
+class IncidentModel extends Equatable {
   final String id;
   final String title;
   final String description;
@@ -10,10 +16,10 @@ class IncidentModel {
   final bool isAnonymous;
   final String? reportedBy;
   final DateTime createdAt;
-  String status;
-  int confirmations;
+  final String status;
+  final int confirmations;
 
-  IncidentModel({
+  const IncidentModel({
     required this.id,
     required this.title,
     required this.description,
@@ -28,6 +34,11 @@ class IncidentModel {
     this.status = 'ongoing',
     this.confirmations = 0,
   });
+
+  factory IncidentModel.fromJson(Map<String, dynamic> json) =>
+      _$IncidentModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$IncidentModelToJson(this);
 
   factory IncidentModel.fromMap(Map<String, dynamic> map, String id) {
     return IncidentModel(
@@ -63,4 +74,21 @@ class IncidentModel {
       'confirmations': confirmations,
     };
   }
+
+  @override
+  List<Object?> get props => [
+        id,
+        title,
+        description,
+        category,
+        severity,
+        latitude,
+        longitude,
+        imageUrl,
+        isAnonymous,
+        reportedBy,
+        createdAt,
+        status,
+        confirmations,
+      ];
 }
